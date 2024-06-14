@@ -1,0 +1,41 @@
+Let's say that you have configured Jenkins in AWS EC2 instance and you are using AWS free tier and you are NOT using Elastic IP, so when ever you start EC2 instance after stopping, you would have noticed Jenkins UI is taking a lot of time to come up. You try to access any page in Jenkins, it will be really slow.
+
+What is the root cause of the issue?
+
+Because EC2 configured in AWS free tier account would have new IP after every restart, Jenkins was trying to use old IP address when you are trying to start Jenkins. Due to this issue, Jenkins will be very slow.
+
+Pre-requisites:
+
+Jenkins is setup in AWS cloud using free-tier account.
+There are two ways you can fix this issue:
+
+First option using command line
+
+Make changes in the xml file by logging into EC2 instance through command line using Git bash or any SSH tool.
+
+
+ap-south-1.compute.amazonaws.com:8080
+
+
+Connect to Jenkins EC2 instance using Git bash or iTerm:
+
+Navigate to Jenkins installation directory:
+cd /var/lib/jenkins/
+
+Modify jenkins.model.JenkinsLocationConfiguration.xml file by executing below command:
+
+sudo nano jenkins.model.JenkinsLocationConfiguration.xml
+
+Make sure you provide Jenkins current URL in below location and restart Jenkins.
+
+sudo service jenkins restart
+
+Now try accessing Jenkins through UI, it will be really performing well.
+Second option us using Jenkins UI
+
+Change public URL under Manage Jenkins-System
+
+Change Jenkins URL to current Jenkins URL:
+
+Click on Apply and Save.
+that's it. You will notice Jenkins is performing well now.
